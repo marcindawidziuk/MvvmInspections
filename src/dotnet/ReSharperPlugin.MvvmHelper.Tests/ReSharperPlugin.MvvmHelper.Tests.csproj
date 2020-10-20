@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReSharperPlugin.SamplePlugin\ReSharperPlugin.SamplePlugin.csproj" />
+    <ProjectReference Include="..\ReSharperPlugin.MvvmHelper\ReSharperPlugin.MvvmHelper.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -34,9 +34,12 @@ namespace ReSharperPlugin.SamplePlugin
             {
                 return null;
             }
+            // Invoka
+                // InvocationExpression 
             
             var backingPropertyName = setterDeclaration.FirstChild.GetText();
             var newExpression = factory.CreateExpression("Set(ref $0, value)", backingPropertyName);
+            // ModificationUtil.AddChild()
             ModificationUtil.ReplaceChild(setterDeclaration, newExpression);
 
             return null;

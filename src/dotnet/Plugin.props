@@ -2,11 +2,11 @@
   <PropertyGroup>
     <SdkVersion>2020.1.0</SdkVersion>
 
-    <Title>SamplePlugin</Title>
-    <Description>Description</Description>
+    <Title>MvvmHelper</Title>
+    <Description>MvvmHelper</Description>
 
-    <Authors>Author</Authors>
-    <Copyright>Copyright $([System.DateTime]::Now.Year) Maintainers of SamplePlugin</Copyright>
+    <Authors>Marcin Dawidziuk</Authors>
+    <Copyright>Copyright $([System.DateTime]::Now.Year) Marcin Dawidziuk</Copyright>
     <PackageTags>resharper plugin</PackageTags>
 
     <PackageProjectUrl></PackageProjectUrl>
