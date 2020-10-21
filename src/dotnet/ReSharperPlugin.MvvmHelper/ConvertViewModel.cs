@@ -12,13 +12,13 @@ using JetBrains.Util;
 
 namespace ReSharperPlugin.MvvmHelper
 {
-    [ContextAction(Name = "AutoToObservableProperty", Description = "ConvertsToObservableProperty", Group = "C#", Disabled = false,
-        Priority = 99)]
-    public class SampleConvertAutoPropertyToObservableProperty : ContextActionBase
+    [ContextAction(Name = "ConvertViewModel", Description = "ConvertsViewModelPropertiesToObservableProperties", Group = "C#", Disabled = false,
+        Priority = -3)]
+    public class SampleConvertViewModel : ContextActionBase
     {
         private readonly IPropertyDeclaration _propertyDeclaration;
 
-        public SampleConvertAutoPropertyToObservableProperty(LanguageIndependentContextActionDataProvider dataProvider)
+        public SampleConvertViewModel(LanguageIndependentContextActionDataProvider dataProvider)
         {
             _propertyDeclaration = dataProvider.GetSelectedElement<IPropertyDeclaration>();
         }
@@ -30,34 +30,47 @@ namespace ReSharperPlugin.MvvmHelper
             
             var classBody = _propertyDeclaration?.Parent?.Parent as IClassDeclaration;
             if (classBody == null)
-                return null;
-            
-            //TODO: Check if field exists
-            var variableName = GetFieldName(_propertyDeclaration.DeclaredName);
-            if (classBody.FieldDeclarationsEnumerable.Any(x => x.DeclaredName == variableName) == false)
             {
-                var fieldDeclaration = factory.CreateFieldDeclaration(_propertyDeclaration.Type, 
-                    variableName);
-                
-                classBody.AddClassMemberDeclaration(fieldDeclaration);
+                return null;
             }
             
-            var getterExpression = factory.CreateExpression("$0;", variableName);
-            
-            var setterExpression = factory.CreateExpression("Set(ref $0, value);", variableName);
-            _propertyDeclaration.GetAccessor(AccessorKind.SETTER)?.SetBodyExpression(setterExpression);
-            _propertyDeclaration.GetAccessor(AccessorKind.GETTER)?.SetBodyExpression(getterExpression);
-            _propertyDeclaration.FormatNode();
+            foreach (var prop in classBody.PropertyDeclarations)
+            {
+                var variableName = GetFieldName(prop.DeclaredName);
+                
+                if (prop.GetAccessor(AccessorKind.SETTER).GetCodeBody().IsEmpty == false)
+                {
+                    continue;
+                }
+                
+                //TODO: Check if field exists
+                if (classBody.FieldDeclarationsEnumerable.Any(x => x.DeclaredName == variableName) == false)
+                {
+                    var fieldDeclaration = factory.CreateFieldDeclaration(prop.Type, 
+                        variableName);
+                    
+                    classBody.AddClassMemberDeclaration(fieldDeclaration);
+                }
+                
+                var getterExpression = factory.CreateExpression("$0;", variableName);
+                
+                var setterExpression = factory.CreateExpression("Set(ref $0, value);", variableName);
+                prop.GetAccessor(AccessorKind.SETTER)?.SetBodyExpression(setterExpression);
+                prop.GetAccessor(AccessorKind.GETTER)?.SetBodyExpression(getterExpression);
+                prop.FormatNode();
+            }
 
             return null;
+            
         }
 
-        public override string Text => "Convert to Observable property";
+        public override string Text => "Convert auto properties to Observable properties";
 
         public override bool IsAvailable(IUserDataHolder cache)
         {
             if (!(_propertyDeclaration?.Parent?.Parent is IClassDeclaration classBody) || !classBody.DeclaredName.EndsWith("ViewModel"))
                 return false;
+            
             var element = _propertyDeclaration;
             if (element.GetAccessor(AccessorKind.SETTER) == null)
                 return false;

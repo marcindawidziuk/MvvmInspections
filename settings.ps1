@@ -1,5 +1,5 @@
 $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
-$PluginId = "ReSharperPlugin.SamplePlugin"
+$PluginId = "ReSharperPlugin.MvvmHelper"
 $SolutionPath = "$PSScriptRoot\SamplePlugin.sln"
 $SourceBasePath = "$PSScriptRoot\src\dotnet"
 

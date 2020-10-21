@@ -1,6 +1,6 @@
 Param(
-    $RootSuffix = "SamplePlugin",
-    $Version = "9999.0.0"
+    $RootSuffix = "MvvmHelper",
+    $Version = "1.0.0"
 )
 
 Set-StrictMode -Version Latest

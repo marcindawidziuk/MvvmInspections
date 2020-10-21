@@ -1,14 +1,14 @@
 <idea-plugin require-restart="true">
-  <id>sampleplugin-rider</id>
-  <name>SamplePlugin</name>
-  <version>_PLACEHOLDER_</version>
-  <vendor url="https://project-url">Author</vendor>
-  <idea-version since-build="_PLACEHOLDER_" until-build="_PLACEHOLDER_" />
+  <id>mvvmhelper-rider</id>
+  <name>MvvmHelper</name>
+  <version>1.0.0</version>
+  <vendor url="https://marcin.uk">Marcin Dawidziuk</vendor>
+  <idea-version since-build="202" until-build="300" />
   <depends>com.intellij.modules.rider</depends>
 
   <description>
 <![CDATA[
-<p>Sample description</p>
+<p>Simple helper for MVVM pattern</p>
 ]]>
   </description>
 <!--#if (include-samples) -->
