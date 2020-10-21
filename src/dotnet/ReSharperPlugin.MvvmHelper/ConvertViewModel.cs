@@ -36,6 +36,11 @@ namespace ReSharperPlugin.MvvmHelper
             
             foreach (var prop in classBody.PropertyDeclarations)
             {
+                if (prop.GetAccessRights() != AccessRights.PUBLIC)
+                {
+                    return null;
+                }
+                
                 var variableName = GetFieldName(prop.DeclaredName);
                 
                 if (prop.GetAccessor(AccessorKind.SETTER).GetCodeBody().IsEmpty == false)
@@ -43,7 +48,6 @@ namespace ReSharperPlugin.MvvmHelper
                     continue;
                 }
                 
-                //TODO: Check if field exists
                 if (classBody.FieldDeclarationsEnumerable.Any(x => x.DeclaredName == variableName) == false)
                 {
                     var fieldDeclaration = factory.CreateFieldDeclaration(prop.Type, 
