@@ -1,6 +1,6 @@
 Param(
     $RootSuffix = "MvvmHelper",
-    $Version = "1.0.0"
+    $Version = "1.0.1"
 )
 
 Set-StrictMode -Version Latest
