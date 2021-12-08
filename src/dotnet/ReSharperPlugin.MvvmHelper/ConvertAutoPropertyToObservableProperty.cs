@@ -7,6 +7,7 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CodeStyle;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
+using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 using JetBrains.Util;
 
@@ -26,30 +27,38 @@ namespace ReSharperPlugin.MvvmHelper
 
         protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
         {
-            var factory = CSharpElementFactory.GetInstance(_propertyDeclaration);
-            
-            var classBody = _propertyDeclaration?.Parent?.Parent as IClassDeclaration;
-            if (classBody == null)
-                return null;
-            
-            //TODO: Check if field exists
-            var variableName = GetFieldName(_propertyDeclaration.DeclaredName);
-            if (classBody.FieldDeclarationsEnumerable.Any(x => x.DeclaredName == variableName) == false)
+            using (WriteLockCookie.Create())
             {
-                var fieldDeclaration = factory.CreateFieldDeclaration(_propertyDeclaration.Type, 
-                    variableName);
+                var factory = CSharpElementFactory.GetInstance(_propertyDeclaration);
                 
-                classBody.AddClassMemberDeclaration(fieldDeclaration);
-            }
-            
-            var getterExpression = factory.CreateExpression("$0;", variableName);
-            
-            var setterExpression = factory.CreateExpression("Set(ref $0, value);", variableName);
-            _propertyDeclaration.GetAccessor(AccessorKind.SETTER)?.SetBodyExpression(setterExpression);
-            _propertyDeclaration.GetAccessor(AccessorKind.GETTER)?.SetBodyExpression(getterExpression);
-            _propertyDeclaration.FormatNode();
+                var classBody = _propertyDeclaration?.Parent?.Parent as IClassDeclaration;
+                if (classBody == null)
+                    return null;
+                
+                //TODO: Check if field exists
+                var variableName = GetFieldName(_propertyDeclaration.DeclaredName);
+                if (classBody.FieldDeclarationsEnumerable.Any(x => x.DeclaredName == variableName) == false)
+                {
+                    var fieldDeclaration = factory.CreateFieldDeclaration(_propertyDeclaration.Type, 
+                        variableName);
+                    
+                    classBody.AddClassMemberDeclaration(fieldDeclaration);
+                }
+                
+                var getterExpression = factory.CreateExpression("$0;\n", variableName);
+                
+                var setterExpression = factory.CreateExpression("Set(ref $0, value);\n", variableName);
+                _propertyDeclaration.GetAccessor(AccessorKind.SETTER)?.SetBodyExpression(setterExpression);
+                _propertyDeclaration.GetAccessor(AccessorKind.GETTER)?.SetBodyExpression(getterExpression);
+                _propertyDeclaration.GetAccessor(AccessorKind.GETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
+                _propertyDeclaration.GetAccessor(AccessorKind.SETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
+                _propertyDeclaration.GetAccessor(AccessorKind.GETTER)?.FormatNode();
+                _propertyDeclaration.GetAccessor(AccessorKind.SETTER)?.FormatNode();
+                _propertyDeclaration.FormatNode();
+                _propertyDeclaration?.Parent?.FormatNode();
 
-            return null;
+                return null;
+            }
         }
 
         public override string Text => "Convert to Observable property";
@@ -60,6 +69,8 @@ namespace ReSharperPlugin.MvvmHelper
                 return false;
             var element = _propertyDeclaration;
             if (element.GetAccessor(AccessorKind.SETTER) == null)
+                return false;
+            if (element.GetAccessor(AccessorKind.GETTER) == null)
                 return false;
 
             if (element.GetAccessor(AccessorKind.SETTER).GetCodeBody().IsEmpty == false)

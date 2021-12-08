@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <SdkVersion>2020.3.0</SdkVersion>
+    <SdkVersion>2021.3.0</SdkVersion>
 
     <Title>MvvmHelper</Title>
     <Description>MvvmHelper</Description>

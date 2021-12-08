@@ -8,6 +8,7 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.ExtensionsAPI.Tree;
+using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 using JetBrains.Util;
 
@@ -27,19 +28,22 @@ namespace ReSharperPlugin.SamplePlugin
 
         protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
         {
-            var setterDeclaration = _propertyDeclaration.GetAccessor(AccessorKind.SETTER).GetCodeBody().ExpressionBody;
-            var factory = CSharpElementFactory.GetInstance(_propertyDeclaration);
-
-            if (setterDeclaration?.FirstChild == null)
+            using (WriteLockCookie.Create())
             {
+                var setterDeclaration = _propertyDeclaration.GetAccessor(AccessorKind.SETTER).GetCodeBody().ExpressionBody;
+                var factory = CSharpElementFactory.GetInstance(_propertyDeclaration);
+
+                if (setterDeclaration?.FirstChild == null)
+                {
+                    return null;
+                }
+                
+                var backingPropertyName = setterDeclaration.FirstChild.GetText();
+                var newExpression = factory.CreateExpression("Set(ref $0, value)", backingPropertyName);
+                ModificationUtil.ReplaceChild(setterDeclaration, newExpression);
+
                 return null;
             }
-            
-            var backingPropertyName = setterDeclaration.FirstChild.GetText();
-            var newExpression = factory.CreateExpression("Set(ref $0, value)", backingPropertyName);
-            ModificationUtil.ReplaceChild(setterDeclaration, newExpression);
-
-            return null;
         }
 
         public override string Text => "Convert to Observable property";
