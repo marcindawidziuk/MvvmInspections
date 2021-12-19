@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.ContextActions;
-using JetBrains.ReSharper.Feature.Services.Refactorings.Specific.Rename;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -12,15 +10,14 @@ using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 using JetBrains.Util;
 
-namespace ReSharperPlugin.SamplePlugin
+namespace ReSharperPlugin.MvvmInspections
 {
-    [ContextAction(Name = "ToObservableProperty", Description = "ConvertsToObservableProperty", Group = "C#", Disabled = false,
-        Priority = 99)]
-    public class SampleConvertToObservableProperty : ContextActionBase
+    [ContextAction(Name = "ConvertMvvmPropertyWithBackingField", Description = "Convert property with backing field to observable properties", Group = "C#", Disabled = false, Priority = 99)]
+    public class MvvmInspectionsConvertToObservableProperty : ContextActionBase
     {
         private readonly IPropertyDeclaration _propertyDeclaration;
 
-        public SampleConvertToObservableProperty(LanguageIndependentContextActionDataProvider dataProvider)
+        public MvvmInspectionsConvertToObservableProperty(LanguageIndependentContextActionDataProvider dataProvider)
         {
             _propertyDeclaration = dataProvider.GetSelectedElement<IPropertyDeclaration>();
         }
@@ -37,7 +34,7 @@ namespace ReSharperPlugin.SamplePlugin
                 {
                     return null;
                 }
-                
+
                 var backingPropertyName = setterDeclaration.FirstChild.GetText();
                 var newExpression = factory.CreateExpression("Set(ref $0, value)", backingPropertyName);
                 ModificationUtil.ReplaceChild(setterDeclaration, newExpression);
@@ -46,7 +43,7 @@ namespace ReSharperPlugin.SamplePlugin
             }
         }
 
-        public override string Text => "Convert to Observable property";
+        public override string Text => "To an observable property";
 
         public override bool IsAvailable(IUserDataHolder cache)
         {

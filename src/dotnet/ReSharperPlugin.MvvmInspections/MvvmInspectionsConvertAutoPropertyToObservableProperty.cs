@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.Linq;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
@@ -11,15 +11,14 @@ using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl;
 using JetBrains.Util;
 
-namespace ReSharperPlugin.MvvmHelper
+namespace ReSharperPlugin.MvvmInspections
 {
-    [ContextAction(Name = "AutoToObservableProperty", Description = "ConvertsToObservableProperty", Group = "C#", Disabled = false,
-        Priority = 99)]
-    public class SampleConvertAutoPropertyToObservableProperty : ContextActionBase
+    [ContextAction(Name = "ConvertMvvmAutoProperty", Description = "Convert auto property to observable properties", Group = "C#", Disabled = false, Priority = 99)]
+    public class MvvmInspectionsConvertAutoPropertyToObservableProperty : ContextActionBase
     {
         private readonly IPropertyDeclaration _propertyDeclaration;
 
-        public SampleConvertAutoPropertyToObservableProperty(LanguageIndependentContextActionDataProvider dataProvider)
+        public MvvmInspectionsConvertAutoPropertyToObservableProperty(LanguageIndependentContextActionDataProvider dataProvider)
         {
             _propertyDeclaration = dataProvider.GetSelectedElement<IPropertyDeclaration>();
         }
@@ -35,7 +34,7 @@ namespace ReSharperPlugin.MvvmHelper
                 if (classBody == null)
                     return null;
                 
-                //TODO: Check if field exists
+                //TODO: Check if field already exists
                 var variableName = GetFieldName(_propertyDeclaration.DeclaredName);
                 if (classBody.FieldDeclarationsEnumerable.Any(x => x.DeclaredName == variableName) == false)
                 {
@@ -61,7 +60,7 @@ namespace ReSharperPlugin.MvvmHelper
             }
         }
 
-        public override string Text => "Convert to Observable property";
+        public override string Text => "To observable property";
 
         public override bool IsAvailable(IUserDataHolder cache)
         {

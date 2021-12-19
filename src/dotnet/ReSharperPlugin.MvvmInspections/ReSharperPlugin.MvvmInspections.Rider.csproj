@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <AssemblyName>ReSharperPlugin.MvvmHelper</AssemblyName>
+    <AssemblyName>ReSharperPlugin.MvvmInspections</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <IsPackable>false</IsPackable>
     <DefineConstants>$(DefineConstants);RIDER</DefineConstants>
@@ -24,7 +24,7 @@
     <!--<Reference Include="WindowsBase" />-->
   <!--</ItemGroup>-->
 
-  <!--<ItemGroup Condition="'$(OS)' != 'Unix'">-->
+  <!--<ItemGroup>-->
     <!--<Reference Include="PresentationCore" />-->
     <!--<Reference Include="PresentationFramework" />-->
 

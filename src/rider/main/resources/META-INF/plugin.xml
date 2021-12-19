@@ -1,23 +1,19 @@
 <idea-plugin require-restart="true">
-  <id>mvvmhelper-rider</id>
-  <name>MvvmHelper</name>
-  <version>1.0.3</version>
-  <vendor url="https://marcin.uk">Marcin Dawidziuk</vendor>
+  <id>com.jetbrains.rider.plugins.mvvminspections</id>
+  <name>MvvmInspections</name>
+  <version>1.0.0</version>
+  <vendor url="https://github.com/marcindawidziuk/MvvmInspections"/>
   <idea-version since-build="213" until-build="213.*" />
   <depends>com.intellij.modules.rider</depends>
 
   <description>
 <![CDATA[
-<p>Simple helper for MVVM pattern</p>
+<p>
+Provides inspections to turn your auto-implemented C# properties into observable ones.
+ Just add a property to your ViewModel and you will be able to apply inspection for a property or an entire class.
+  Ensure your class name ends with 'ViewModel', works well with frameworks like MvvmLight.
+</p>
 ]]>
   </description>
-<!--#if (include-samples) -->
 
-  <extensions defaultExtensionNs="com.intellij">
-  </extensions>
-
-  <actions>
-  </actions>
-<!--#endif -->
-  
 </idea-plugin>

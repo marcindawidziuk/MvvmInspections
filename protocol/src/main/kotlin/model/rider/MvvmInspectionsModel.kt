@@ -5,7 +5,7 @@ import com.jetbrains.rd.generator.nova.*
 import com.jetbrains.rd.generator.nova.PredefinedType.*
 
 @Suppress("unused")
-object SamplePluginModel : Ext(SolutionModel.Solution) {
+object MvvmInspectionsModel : Ext(SolutionModel.Solution) {
 
     val MyEnum = enum {
         +"FirstValue"
@@ -18,8 +18,8 @@ object SamplePluginModel : Ext(SolutionModel.Solution) {
     }
 
     init {
-        //setting(CSharp50Generator.Namespace, "ReSharperPlugin.SamplePlugin.Rider.Model")
-        //setting(Kotlin11Generator.Namespace, "com.jetbrains.rider.sampleplugin.model")
+        //setting(CSharp50Generator.Namespace, "ReSharperPlugin.MvvmInspections.Rider.Model")
+        //setting(Kotlin11Generator.Namespace, "com.jetbrains.rider.mvvminspections.model")
 
         property("myString", string)
         property("myBool", bool)

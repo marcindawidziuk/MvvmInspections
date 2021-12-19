@@ -1,16 +1,18 @@
-<Project>
+﻿<Project>
+
   <PropertyGroup>
     <SdkVersion>2021.3.0</SdkVersion>
 
-    <Title>MvvmHelper</Title>
-    <Description>MvvmHelper</Description>
+    <Title>MvvmInspections</Title>
+    <Description>Description</Description>
 
-    <Authors>Marcin Dawidziuk</Authors>
-    <Copyright>Copyright $([System.DateTime]::Now.Year) Marcin Dawidziuk</Copyright>
+    <Authors>Author</Authors>
+    <Copyright>Copyright $([System.DateTime]::Now.Year) Maintainers of MvvmInspections</Copyright>
     <PackageTags>resharper plugin</PackageTags>
 
     <PackageProjectUrl></PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageIconUrl>https://www.flaticon.com/svg/static/icons/svg/771/771235.svg</PackageIconUrl>
+    <PackageIconUrl></PackageIconUrl>
   </PropertyGroup>
+
 </Project>

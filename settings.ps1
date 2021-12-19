@@ -1,9 +1,8 @@
-$PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
-$PluginId = "ReSharperPlugin.MvvmHelper"
-$SolutionPath = "$PSScriptRoot\SamplePlugin.sln"
+$PluginId = "ReSharperPlugin.MvvmInspections"
+$SolutionPath = "$PSScriptRoot\ReSharperPlugin.MvvmInspections.sln"
 $SourceBasePath = "$PSScriptRoot\src\dotnet"
 
-$VsWhereOutput = [xml] (& "$PSScriptRoot\tools\vswhere.exe" -format xml)
+$VsWhereOutput = [xml] (& "$PSScriptRoot\tools\vswhere.exe" -format xml -products *)
 $VisualStudio = $VsWhereOutput.instances.instance |
     Where-Object { $_.channelId -match "Release" } |
     Sort-Object -Property installationVersion |
@@ -12,7 +11,7 @@ $VisualStudio = $VsWhereOutput.instances.instance |
 $VisualStudioBaseDirectory = $VisualStudio.installationPath
 $VisualStudioMajorVersion = ($VisualStudio.installationVersion -split '\.')[0]
 $VisualStudioInstanceId = $VisualStudio.instanceId
-$DevEnvPath = Get-ChildItem "$VisualStudioBaseDirectory\Common7\IDE\devenv.exe"
+$DevEnvPath = Get-ChildItem "$VisualStudioBaseDirectory\*\IDE\devenv.exe"
 $MSBuildPath = Get-ChildItem "$VisualStudioBaseDirectory\MSBuild\*\Bin\MSBuild.exe"
 
 $OutputDirectory = "$PSScriptRoot\output"

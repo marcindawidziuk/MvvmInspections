@@ -16,15 +16,9 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.ReSharper.SDK" Version="$(SdkVersion)" PrivateAssets="all" />
     <!-- TODO: https://github.com/NuGet/Home/issues/7154 -->
-    <PackageReference Include="Wave" Version="[$(WaveVersion)]" />
+    <PackageReference Include="Wave" Version="[$(WaveVersion),$(UpperWaveVersion))" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Rider\**\*" />
-    <None Remove="Rider\**\*" />
-    <EmbeddedResource Remove="Rider\**\*" />
-    <Content Remove="Rider\**\*" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).dll" PackagePath="dotFiles" Pack="true" />
@@ -40,7 +34,7 @@
     <!--<Reference Include="WindowsBase" />-->
   <!--</ItemGroup>-->
 
-  <!--<ItemGroup Condition="'$(OS)' != 'Unix'">-->
+  <!--<ItemGroup>-->
     <!--<Reference Include="PresentationCore" />-->
     <!--<Reference Include="PresentationFramework" />-->
 
