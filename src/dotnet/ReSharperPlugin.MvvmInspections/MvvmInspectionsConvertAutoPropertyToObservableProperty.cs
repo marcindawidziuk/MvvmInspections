@@ -47,12 +47,12 @@ namespace ReSharperPlugin.MvvmInspections
                 var getterExpression = factory.CreateExpression("$0;\n", variableName);
                 
                 var setterExpression = factory.CreateExpression("Set(ref $0, value);\n", variableName);
-                _propertyDeclaration.GetAccessor(AccessorKind.SETTER)?.SetBodyExpression(setterExpression);
-                _propertyDeclaration.GetAccessor(AccessorKind.GETTER)?.SetBodyExpression(getterExpression);
-                _propertyDeclaration.GetAccessor(AccessorKind.GETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
-                _propertyDeclaration.GetAccessor(AccessorKind.SETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
-                _propertyDeclaration.GetAccessor(AccessorKind.GETTER)?.FormatNode();
-                _propertyDeclaration.GetAccessor(AccessorKind.SETTER)?.FormatNode();
+                _propertyDeclaration.GetAccessorDeclaration(AccessorKind.SETTER)?.SetBodyExpression(setterExpression);
+                _propertyDeclaration.GetAccessorDeclaration(AccessorKind.GETTER)?.SetBodyExpression(getterExpression);
+                _propertyDeclaration.GetAccessorDeclaration(AccessorKind.GETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
+                _propertyDeclaration.GetAccessorDeclaration(AccessorKind.SETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
+                _propertyDeclaration.GetAccessorDeclaration(AccessorKind.GETTER)?.FormatNode();
+                _propertyDeclaration.GetAccessorDeclaration(AccessorKind.SETTER)?.FormatNode();
                 _propertyDeclaration.FormatNode();
                 _propertyDeclaration?.Parent?.FormatNode();
 
@@ -67,15 +67,15 @@ namespace ReSharperPlugin.MvvmInspections
             if (!(_propertyDeclaration?.Parent?.Parent is IClassDeclaration classBody) || !classBody.DeclaredName.EndsWith("ViewModel"))
                 return false;
             var element = _propertyDeclaration;
-            if (element.GetAccessor(AccessorKind.SETTER) == null)
+            if (element.GetAccessorDeclaration(AccessorKind.SETTER) == null)
                 return false;
-            if (element.GetAccessor(AccessorKind.GETTER) == null)
+            if (element.GetAccessorDeclaration(AccessorKind.GETTER) == null)
                 return false;
 
-            if (element.GetAccessor(AccessorKind.SETTER).GetCodeBody().IsEmpty == false)
+            if (element.GetAccessorDeclaration(AccessorKind.SETTER).GetCodeBody().IsEmpty == false)
                 return false;
             
-            if (element.GetAccessor(AccessorKind.GETTER).GetCodeBody().IsEmpty == false)
+            if (element.GetAccessorDeclaration(AccessorKind.GETTER).GetCodeBody().IsEmpty == false)
                 return false;
             
             return true;

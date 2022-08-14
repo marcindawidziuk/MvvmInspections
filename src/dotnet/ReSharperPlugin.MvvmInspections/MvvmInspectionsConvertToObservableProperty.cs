@@ -27,7 +27,7 @@ namespace ReSharperPlugin.MvvmInspections
         {
             using (WriteLockCookie.Create())
             {
-                var setterDeclaration = _propertyDeclaration.GetAccessor(AccessorKind.SETTER).GetCodeBody().ExpressionBody;
+                var setterDeclaration = _propertyDeclaration.GetAccessorDeclaration(AccessorKind.SETTER).GetCodeBody().ExpressionBody;
                 var factory = CSharpElementFactory.GetInstance(_propertyDeclaration);
 
                 if (setterDeclaration?.FirstChild == null)
@@ -50,10 +50,10 @@ namespace ReSharperPlugin.MvvmInspections
             if (!(_propertyDeclaration?.Parent?.Parent is IClassDeclaration classBody) || !classBody.DeclaredName.EndsWith("ViewModel"))
                 return false;
             var element = _propertyDeclaration;
-            if (element.GetAccessor(AccessorKind.SETTER) == null)
+            if (element.GetAccessorDeclaration(AccessorKind.SETTER) == null)
                 return false;
 
-            if (element.GetAccessor(AccessorKind.SETTER).GetCodeBody().ExpressionBody is IAssignmentExpression == false)
+            if (element.GetAccessorDeclaration(AccessorKind.SETTER).GetCodeBody().ExpressionBody is IAssignmentExpression == false)
                 return false;
 
             return true;

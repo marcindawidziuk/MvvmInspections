@@ -22,7 +22,7 @@ namespace ReSharperPlugin.MvvmInspections
         {
             _classDeclaration = dataProvider.GetSelectedElement<IClassDeclaration>();
         }
-
+        
         protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
         {
             using (WriteLockCookie.Create())
@@ -43,7 +43,7 @@ namespace ReSharperPlugin.MvvmInspections
                     
                     var variableName = GetFieldName(prop.DeclaredName);
                     
-                    if (prop.GetAccessor(AccessorKind.SETTER).GetCodeBody().IsEmpty == false)
+                    if (prop.GetAccessorDeclaration(AccessorKind.SETTER).GetCodeBody().IsEmpty == false)
                     {
                         continue;
                     }
@@ -59,13 +59,13 @@ namespace ReSharperPlugin.MvvmInspections
                     var getterExpression = factory.CreateExpression("$0;", variableName);
                     
                     var setterExpression = factory.CreateExpression("Set(ref $0, value);", variableName);
-                    prop.GetAccessor(AccessorKind.SETTER)?.SetBodyExpression(setterExpression);
-                    prop.GetAccessor(AccessorKind.GETTER)?.SetBodyExpression(getterExpression);
+                    prop.GetAccessorDeclaration(AccessorKind.SETTER)?.SetBodyExpression(setterExpression);
+                    prop.GetAccessorDeclaration(AccessorKind.GETTER)?.SetBodyExpression(getterExpression);
                     
-                    prop.GetAccessor(AccessorKind.GETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
-                    prop.GetAccessor(AccessorKind.SETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
-                    prop.GetAccessor(AccessorKind.GETTER)?.FormatNode();
-                    prop.GetAccessor(AccessorKind.SETTER)?.FormatNode();
+                    prop.GetAccessorDeclaration(AccessorKind.GETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
+                    prop.GetAccessorDeclaration(AccessorKind.SETTER)?.AddLineBreakBefore(CodeFormatProfile.SPACIOUS);
+                    prop.GetAccessorDeclaration(AccessorKind.GETTER)?.FormatNode();
+                    prop.GetAccessorDeclaration(AccessorKind.SETTER)?.FormatNode();
                     prop.FormatNode();
                     prop.Parent?.FormatNode();
                 }
@@ -82,7 +82,7 @@ namespace ReSharperPlugin.MvvmInspections
                 return false;
             
             var hasAutoProperties = _classDeclaration.PropertyDeclarations
-                .Any(prop => prop.GetAccessor(AccessorKind.SETTER).GetCodeBody().IsEmpty == false);
+                .Any(prop => prop.GetAccessorDeclaration(AccessorKind.SETTER).GetCodeBody().IsEmpty == false);
             if (hasAutoProperties == false)
                 return false;
             
